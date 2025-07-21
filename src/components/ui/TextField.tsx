@@ -1,10 +1,10 @@
-export default function TextField(){
-    return(
-        <input
-        id="email"
-        type="email"
-        placeholder="m@example.com"
-        className="
+export default function TextField() {
+  return (
+    <input
+      id="email"
+      type="email"
+      placeholder="m@example.com"
+      className="
           w-full
           px-3
           py-1
@@ -20,6 +20,6 @@ export default function TextField(){
           placeholder-gray-500
           shadow-xs
         "
-      />
-    )
+    />
+  );
 }
