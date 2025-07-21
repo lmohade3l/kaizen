@@ -1,0 +1,25 @@
+export default function TextField(){
+    return(
+        <input
+        id="email"
+        type="email"
+        placeholder="m@example.com"
+        className="
+          w-full
+          px-3
+          py-1
+          border
+          border-gray-300
+          rounded-lg
+          focus:outline-none
+          focus:ring-3
+          focus:ring-[#CFCFCF]
+          focus:border-gray-400
+          focus:shadow-lg
+          text-gray-700
+          placeholder-gray-500
+          shadow-xs
+        "
+      />
+    )
+}
