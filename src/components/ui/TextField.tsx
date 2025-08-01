@@ -1,9 +1,9 @@
-export default function TextField() {
+export default function TextField({placeholder} : {placeholder?: string}) {
   return (
     <input
       id="email"
       type="email"
-      placeholder="m@example.com"
+      placeholder={placeholder || ""}
       className="
           w-full
           px-3
@@ -20,6 +20,7 @@ export default function TextField() {
           shadow-xs
           transition-all
           duration-300
+          placeholder:text-sm
         "
     />
   );
