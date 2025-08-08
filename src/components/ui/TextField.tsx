@@ -1,8 +1,9 @@
-export default function TextField({placeholder} : {placeholder?: string}) {
+export default function TextField({placeholder , name , type} : {placeholder?: string; name:string; type: string}) {
   return (
     <input
       id="email"
       type="email"
+      name={name}
       placeholder={placeholder || ""}
       className="
           w-full

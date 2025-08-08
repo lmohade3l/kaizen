@@ -1,32 +1,27 @@
-'use server'
+"use server";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { v4 as uuidv4 } from "uuid";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function signupWithEmail(prevState: any, formData: FormData) {
-  const supabase = createSupabaseServerClient()
+export async function signupWithEmail(
+  formData: any
+) {
+  const supabase = createSupabaseServerClient();
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const confirmPassword = formData.get('confirmPassword') as string
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
   if (password !== confirmPassword) {
-    return { error: 'Passwords do not match.' }
+    return { error: "Passwords do not match." };
   }
-  console.log("imma use this supabase function")
-//   const { error } = await supabase.auth.signUp({
-//     email,
-//     password,
-//   })
 
-  const { error: insertError } = await supabase.from('users').insert({
-    // id: userId,
+  const res = await supabase.from("users").insert({
+    id: uuidv4(),
     email: email,
-    created_at: new Date().toISOString()  // optional: depends on your schema
-  })
+    password: password, 
+    created_at: new Date().toISOString(), 
+  });
 
-//   if (error) {
-//     return { error: error.message }
-//   }
-
-  return { success: true }
+  return { success: true };
 }
