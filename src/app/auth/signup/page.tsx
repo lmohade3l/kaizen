@@ -1,44 +1,42 @@
-'use client'
+"use client";
 
 import TextField from "@/components/ui/TextField";
 import Image from "next/image";
 import GoogleIcon from "@/assets/icons/Google-alt.svg";
-import { useActionState } from 'react'
+import { useActionState } from "react";
 import { signupWithEmail } from "@/actions/auth/signup";
 
 type FormState = {
   error: string;
   success: boolean;
-}
+};
 
 export default function Signup() {
-  const initialState: FormState = { error: '', success: false }
+  const initialState: FormState = { error: "", success: false };
 
-    const [state, formAction, isPending] = useActionState(
-    async (
-      formData: FormData
-    ): Promise<any> => {
+  const [state, formAction, isPending] = useActionState(
+    async (formData: FormData): Promise<any> => {
       try {
         const result = await signupWithEmail(formData);
 
         if (result.success) {
-        //   toast.success('Account created successfully');
-        //   router.push('/dashboard');
-        console.log('hey finally' , result)
+          //   toast.success('Account created successfully');
+          //   router.push('/dashboard');
+          console.log("hey finally", result);
         }
 
         return {
           success: result.success,
-        //   message: result.message,
-        //   errors:
-        //     typeof result.errors === 'string'
-        //       ? { general: [result.errors] }
-        //       : result.errors,
+          //   message: result.message,
+          //   errors:
+          //     typeof result.errors === 'string'
+          //       ? { general: [result.errors] }
+          //       : result.errors,
         };
       } catch (error) {
         return {
           success: false,
-          message: (error as Error).message || 'An error occurred',
+          message: (error as Error).message || "An error occurred",
           errors: undefined,
         };
       }
@@ -51,11 +49,14 @@ export default function Signup() {
       <div className="bg-white flex flex-col items-center min-w-100 mx-auto border-1 border-gray-300 rounded-lg">
         <div className="flex flex-col gap-3 w-full items-center p-4">
           <p className="text-[24px] font-[500]">Create an account</p>
-          
-          <form action={formAction} className="flex flex-col gap-3 w-full items-center">
+
+          <form
+            action={formAction}
+            className="flex flex-col gap-3 w-full items-center"
+          >
             <div className="flex flex-col w-full gap-1">
               <p className="text-[14px] font-[400] pl-2">Email</p>
-              <TextField 
+              <TextField
                 name="email"
                 type="email"
                 placeholder="name@example.com"
@@ -64,7 +65,7 @@ export default function Signup() {
             </div>
             <div className="flex flex-col w-full gap-1">
               <p className="text-[14px] font-[400] pl-2">Password</p>
-              <TextField 
+              <TextField
                 name="password"
                 type="password"
                 placeholder="password"
@@ -73,7 +74,7 @@ export default function Signup() {
             </div>
             <div className="flex flex-col w-full gap-1">
               <p className="text-[14px] font-[400] pl-2">Confirm Password</p>
-              <TextField 
+              <TextField
                 name="confirmPassword"
                 type="password"
                 placeholder="confirm password"
@@ -88,12 +89,12 @@ export default function Signup() {
               <p className="text-green-600 text-sm">Check your email to confirm!</p>
             )} */}
 
-            <button 
+            <button
               type="submit"
               disabled={isPending}
               className="text-[14px] bg-lime-600 w-full rounded-lg p-2 text-white hover:bg-lime-500 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isPending ? 'Creating Account...' : 'Signup With Email'}
+              {isPending ? "Creating Account..." : "Signup With Email"}
             </button>
           </form>
 
@@ -103,9 +104,15 @@ export default function Signup() {
             <div className="border-t-1 border-gray-300 flex-1"></div>
           </div>
 
-          <button className="flex w-full gap-2 justify-center p-2 rounded-lg border-1 border-gray-300 text-[14px]">
-            <Image src={GoogleIcon} alt="" width={20} height={20}/>
-            Google
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = "/api/auth/google"; // This route will start the OAuth flow
+            }}
+            className="flex w-full gap-2 justify-center p-2 rounded-lg border border-gray-300 text-[14px] hover:bg-gray-100 transition"
+          >
+            <Image src={GoogleIcon} alt="Google" width={20} height={20} />
+            Sign in with Google
           </button>
         </div>
       </div>
