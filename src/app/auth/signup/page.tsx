@@ -22,16 +22,10 @@ export default function Signup() {
         if (result.success) {
           //   toast.success('Account created successfully');
           //   router.push('/dashboard');
-          console.log("hey finally", result);
         }
 
         return {
           success: result.success,
-          //   message: result.message,
-          //   errors:
-          //     typeof result.errors === 'string'
-          //       ? { general: [result.errors] }
-          //       : result.errors,
         };
       } catch (error) {
         return {
@@ -60,7 +54,6 @@ export default function Signup() {
                 name="email"
                 type="email"
                 placeholder="name@example.com"
-                // required
               />
             </div>
             <div className="flex flex-col w-full gap-1">
@@ -68,8 +61,7 @@ export default function Signup() {
               <TextField
                 name="password"
                 type="password"
-                placeholder="password"
-                // required
+                placeholder="Password"
               />
             </div>
             <div className="flex flex-col w-full gap-1">
@@ -77,22 +69,18 @@ export default function Signup() {
               <TextField
                 name="confirmPassword"
                 type="password"
-                placeholder="confirm password"
-                // required
+                placeholder="Confirm password"
               />
             </div>
 
             {state?.error && (
               <p className="text-red-500 text-sm">{state.error}</p>
             )}
-            {/* {state?.success && (
-              <p className="text-green-600 text-sm">Check your email to confirm!</p>
-            )} */}
 
             <button
               type="submit"
               disabled={isPending}
-              className="text-[14px] bg-lime-600 w-full rounded-lg p-2 text-white hover:bg-lime-500 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-[14px] bg-lime-600 w-full rounded-lg p-2 text-white hover:bg-lime-500 mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? "Creating Account..." : "Signup With Email"}
             </button>
@@ -107,13 +95,20 @@ export default function Signup() {
           <button
             type="button"
             onClick={() => {
-              window.location.href = "/api/auth/google"; // This route will start the OAuth flow
+              window.location.href = "/api/auth/google";
             }}
-            className="flex w-full gap-2 justify-center p-2 rounded-lg border border-gray-300 text-[14px] hover:bg-gray-100 transition"
+            className="flex w-full gap-2 justify-center p-2 rounded-lg border border-gray-300 cursor-pointer text-[14px] hover:bg-gray-100 transition"
           >
             <Image src={GoogleIcon} alt="Google" width={20} height={20} />
-            Sign in with Google
+            Google
           </button>
+
+          <p className="text-[14px] mt-2">
+            Already have an account?{" "}
+            <span className="text-decoration-line: underline cursor-pointer">
+              Login
+            </span>
+          </p>
         </div>
       </div>
     </div>

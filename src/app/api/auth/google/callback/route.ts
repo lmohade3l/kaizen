@@ -9,12 +9,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing code" }, { status: 400 });
   }
 
-  console.log(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
-  );
-
   // 1. Exchange code for tokens
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
