@@ -5,6 +5,7 @@ import Image from "next/image";
 import GoogleIcon from "@/assets/icons/Google-alt.svg";
 import { useActionState } from "react";
 import { signupWithEmail } from "@/actions/auth/signup";
+import Button from "@/components/ui/Button";
 
 type FormState = {
   error: string;
@@ -64,7 +65,7 @@ export default function Signup() {
                 placeholder="Password"
               />
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 mb-2">
               <p className="text-[14px] font-[400] pl-2">Confirm Password</p>
               <TextField
                 name="confirmPassword"
@@ -76,14 +77,10 @@ export default function Signup() {
             {state?.error && (
               <p className="text-red-500 text-sm">{state.error}</p>
             )}
-
-            <button
-              type="submit"
-              disabled={isPending}
-              className="text-[14px] bg-lime-600 w-full rounded-lg p-2 text-white hover:bg-lime-500 mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            
+            <Button disabled={isPending}>
               {isPending ? "Creating Account..." : "Signup With Email"}
-            </button>
+            </Button>
           </form>
 
           <div className="flex w-full items-center gap-2">
@@ -92,16 +89,16 @@ export default function Signup() {
             <div className="border-t-1 border-gray-300 flex-1"></div>
           </div>
 
-          <button
-            type="button"
+          <Button
             onClick={() => {
               window.location.href = "/api/auth/google";
             }}
-            className="flex w-full gap-2 justify-center p-2 rounded-lg border border-gray-300 cursor-pointer text-[14px] hover:bg-gray-100 transition"
+            variant="outlined"
           >
             <Image src={GoogleIcon} alt="Google" width={20} height={20} />
             Google
-          </button>
+
+          </Button>
 
           <p className="text-[14px] mt-2">
             Already have an account?{" "}
