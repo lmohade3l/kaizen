@@ -6,6 +6,7 @@ import GoogleIcon from "@/assets/icons/Google-alt.svg";
 import { useActionState } from "react";
 import { signupWithEmail } from "@/actions/auth/signup";
 import Button from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 
 type FormState = {
   error: string;
@@ -13,6 +14,7 @@ type FormState = {
 };
 
 export default function Signup() {
+  const router = useRouter();
   const initialState: FormState = { error: "", success: false };
 
   const [state, formAction, isPending] = useActionState(
@@ -75,7 +77,9 @@ export default function Signup() {
               <p className="text-red-500 text-sm">{state.error}</p>
             )}
 
-            <Button disabled={isPending}>
+            <Button onClick={() => {
+              window.location.href = "/api/auth/google";
+            }} disabled={isPending}>
               {isPending ? "Logging in..." : "Login"}
             </Button>
           </form>
@@ -98,7 +102,7 @@ export default function Signup() {
 
           <p className="text-[14px] mt-2">
             Don't have an account?{" "}
-            <span className="text-decoration-line: underline cursor-pointer">
+            <span onClick={() => router.push('/auth/signup')} className="text-decoration-line: underline cursor-pointer">
               Signup
             </span>
           </p>

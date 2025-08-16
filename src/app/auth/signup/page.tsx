@@ -6,6 +6,7 @@ import GoogleIcon from "@/assets/icons/Google-alt.svg";
 import { useActionState } from "react";
 import { signupWithEmail } from "@/actions/auth/signup";
 import Button from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 
 type FormState = {
   error: string;
@@ -14,6 +15,7 @@ type FormState = {
 
 export default function Signup() {
   const initialState: FormState = { error: "", success: false };
+  const router = useRouter();
 
   const [state, formAction, isPending] = useActionState(
     async (formData: FormData): Promise<any> => {
@@ -102,7 +104,7 @@ export default function Signup() {
 
           <p className="text-[14px] mt-2">
             Already have an account?{" "}
-            <span className="text-decoration-line: underline cursor-pointer">
+            <span onClick={() => router.push('/auth/login')}  className="text-decoration-line: underline cursor-pointer">
               Login
             </span>
           </p>
