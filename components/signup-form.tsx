@@ -1,11 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
@@ -14,11 +11,45 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { signupWithEmail } from "@/actions/auth/signup";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<any>();
+
+  const onSubmit = async (data: any) => {
+    console.log({ data });
+    // setServerError("");
+
+    if (data.password !== data.confirmPassword) {
+      // setServerError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const result = await signupWithEmail(data);
+
+      console.log('result:' , result)
+
+      // if (result.success) {
+        // redirect or show toast
+        // router.push("/home");
+      // } else {
+        // setServerError( "Signup failed");
+      // }
+    } catch (err: any) {
+      // setServerError(err.message || "Something went wrong");
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -27,15 +58,22 @@ export function SignupForm({
         </CardHeader>
 
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
-                  type="email"
+                  // type="email"
                   placeholder="m@example.com"
-                  required
+                  // required
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Enter a valid email",
+                    },
+                  })}
                 />
               </Field>
 
@@ -43,13 +81,32 @@ export function SignupForm({
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
+                    <Input
+                      {...register("password", {
+                        required: "Password is required",
+                        // minLength: {
+                        //   value: 6,
+                        //   message: "Password must be at least 6 characters",
+                        // },
+                      })}
+                      id="password"
+                      type="password"
+                      required
+                    />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="confirm-password">
+                    <FieldLabel htmlFor="confirmPassword">
                       Confirm Password
                     </FieldLabel>
-                    <Input id="confirm-password" type="password" required />
+                    <Input
+                      {...register("confirmPassword", {
+                        // required: "Please confirm your password",
+                        // validate: (value) =>
+                        //   value === watch("password") || "Passwords do not match",
+                      })}
+                      id="confirm-password"
+                      type="password"
+                    />
                   </Field>
                 </Field>
                 <FieldDescription>
@@ -62,7 +119,7 @@ export function SignupForm({
               </Field>
 
               <FieldSeparator>Or continue with</FieldSeparator>
-              
+
               <Field>
                 <Button variant="outline" type="button">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
