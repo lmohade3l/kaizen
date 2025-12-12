@@ -14,11 +14,14 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { signupWithEmail } from "@/actions/auth/signup";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -49,15 +52,14 @@ export function SignupForm({
     try {
       const result = await signupWithEmail(data);
 
-      console.log("result:", result);
-
       if (result.success) {
         await signIn("credentials", {
           email: data?.email,
           password: data?.password,
           redirect: false,
         });
-        console.log("created a session!");
+        
+        router.push('/dashboard')
       } else {
         // setServerError("Signup failed");
       }

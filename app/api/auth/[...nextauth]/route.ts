@@ -55,6 +55,10 @@ export const authOptions = {
       return true;
     },
 
+    async redirect({ url, baseUrl }: any) {
+      return `${baseUrl}/dashboard`;
+    },
+
     async jwt({ token, user, account }: any) {
       if (user) {
         token.id = user.id;
