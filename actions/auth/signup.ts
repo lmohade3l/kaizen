@@ -1,31 +1,25 @@
 "use server";
 
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function signupWithEmail(
-  formData: any
-) {
-
-    console.log('im in the action now')
+export async function signupWithEmail(formData: any) {
   const supabase = createSupabaseServerClient();
 
-  const email = formData.email as string;
-  const password = formData.password as string;
-  const confirmPassword = formData.confirmPassword as string;
+  const { email, password } = formData;
 
-  if (password !== confirmPassword) {
-    return { error: "Passwords do not match." };
-  }
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const res = await supabase.from("users").insert({
+  const { error } = await supabase.from("users").insert({
     id: uuidv4(),
-    email: email,
-    password: password, 
-    created_at: new Date().toISOString(), 
+    email,
+    password: hashedPassword,
   });
 
-  console.log('hey res:' , res)
+  if (error) {
+    return { error: error.message };
+  }
 
-  return res;
+  return { success: true };
 }
