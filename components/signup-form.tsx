@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { signupWithEmail } from "@/actions/auth/signup";
+import { signIn } from "next-auth/react";
 
 export function SignupForm({
   className,
@@ -22,29 +23,44 @@ export function SignupForm({
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors, isSubmitting },
-  } = useForm<any>();
+  } = useForm<{
+    email: "";
+    password: "";
+    confirmPassword: "";
+  }>({
+    mode: "onBlur",
+  });
 
-  const onSubmit = async (data: any) => {
-    console.log({ data });
-    // setServerError("");
-
+  const onSubmit = async (data: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
     if (data.password !== data.confirmPassword) {
-      // setServerError("Passwords do not match");
+      setError("password", {
+        type: "validate",
+        message: "Passwords do not match",
+      });
       return;
     }
 
     try {
       const result = await signupWithEmail(data);
 
-      console.log('result:' , result)
+      console.log("result:", result);
 
-      // if (result.success) {
-        // redirect or show toast
-        // router.push("/home");
-      // } else {
-        // setServerError( "Signup failed");
-      // }
+      if (result.success) {
+        await signIn("credentials", {
+          email: data?.email,
+          password: data?.password,
+          redirect: false,
+        });
+        console.log("created a session!");
+      } else {
+        // setServerError("Signup failed");
+      }
     } catch (err: any) {
       // setServerError(err.message || "Something went wrong");
     }
@@ -60,13 +76,12 @@ export function SignupForm({
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
-              <Field>
+              <Field className="flex flex-col gap-1">
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
-                  // type="email"
                   placeholder="m@example.com"
-                  // required
+                  aria-invalid={!!errors.email}
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -75,43 +90,40 @@ export function SignupForm({
                     },
                   })}
                 />
+                <p className="text-[12px] text-[red]">
+                  {errors?.email?.message}
+                </p>
               </Field>
 
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
-                  <Field>
+                  <Field className="flex flex-col gap-1">
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <Input
+                      aria-invalid={!!errors.password}
                       {...register("password", {
                         required: "Password is required",
-                        // minLength: {
-                        //   value: 6,
-                        //   message: "Password must be at least 6 characters",
-                        // },
+                        minLength: {
+                          value: 6,
+                          message: "Password must be at least 6 characters",
+                        },
                       })}
                       id="password"
-                      type="password"
-                      required
                     />
+                    <p className="text-[12px] text-[red]">
+                      {errors?.password?.message}
+                    </p>
                   </Field>
-                  <Field>
+                  <Field className="flex flex-col gap-1">
                     <FieldLabel htmlFor="confirmPassword">
                       Confirm Password
                     </FieldLabel>
                     <Input
-                      {...register("confirmPassword", {
-                        // required: "Please confirm your password",
-                        // validate: (value) =>
-                        //   value === watch("password") || "Passwords do not match",
-                      })}
+                      {...register("confirmPassword", {})}
                       id="confirm-password"
-                      type="password"
                     />
                   </Field>
                 </Field>
-                <FieldDescription>
-                  Must be at least 8 characters long.
-                </FieldDescription>
               </Field>
 
               <Field>
@@ -128,7 +140,7 @@ export function SignupForm({
                       fill="currentColor"
                     />
                   </svg>
-                  Continue with Google
+                  Google
                 </Button>
                 <FieldDescription className="px-6 text-center">
                   Already have an account? <a href="#">Sign in</a>
