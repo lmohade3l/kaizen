@@ -73,12 +73,13 @@ export const authOptions = {
             .maybeSingle();
 
           if (!existing && !error) {
+            const hashed = await bcrypt.hash(uuidv4(), 10);
             const { data: newUser } = await supabase
               .from("users")
               .insert({
                 email: user.email,
                 id: uuidv4(),
-                password: uuidv4(),
+                password: hashed,
               })
               .select("id")
               .single();
