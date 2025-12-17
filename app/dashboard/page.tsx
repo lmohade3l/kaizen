@@ -18,9 +18,8 @@ export default function Dashboard() {
             width={40}
             height={40}
             className="rounded-full"
+            unoptimized
           />
-
-          <img src={data?.user?.image} />
         </>
       )}
     </div>
