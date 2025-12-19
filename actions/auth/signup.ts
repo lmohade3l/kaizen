@@ -3,8 +3,9 @@
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SignupFormData } from "@/data/types/auth";
 
-export async function signupWithEmail(formData: any) {
+export async function signupWithEmail(formData: SignupFormData) {
   const supabase = createSupabaseServerClient();
 
   const { email, password } = formData;

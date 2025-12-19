@@ -55,8 +55,23 @@ export const authOptions = {
       return true;
     },
 
-    async redirect({ url, baseUrl }: any) {
-      return `${baseUrl}/dashboard`;
+    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+      const defaultUrl = `${baseUrl}/dashboard`;
+
+      if (!url) return defaultUrl;
+
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+
+      try {
+        const parsed = new URL(url);
+
+        if (parsed.origin !== baseUrl) return defaultUrl;
+
+        const cleanPath = parsed.pathname.replace(new RegExp(`^${baseUrl}`), "");
+        return `${baseUrl}${cleanPath}${parsed.search}${parsed.hash}`;
+      } catch {
+        return defaultUrl;
+      }
     },
 
     async jwt({ token, user, account }: any) {
